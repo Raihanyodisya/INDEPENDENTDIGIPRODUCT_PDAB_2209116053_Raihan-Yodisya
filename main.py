@@ -13,31 +13,34 @@ st.subheader("Dataset")
 st.write(df.head(5))
 
 st.subheader('Exploratory Data Analysis (EDA)')
-analysis_choice = st.sidebar.selectbox("Select Analysis", ["Overview", "Correlation", "Distribution"])
 
-if analysis_choice == "Overview":
-    st.write("### Dataset Overview")
-    st.write(df.head())
+st.title('Number of Cars by Seller Type')
+fig, ax = plt.subplots(figsize=(10, 6))
+sns.countplot(x='Seller_Type', data=df, palette='pastel')
+ax.set_xlabel('Seller Type', fontsize=12)
+ax.set_ylabel('Count', fontsize=12)
+ax.set_title('Number of Cars by Seller Type', fontsize=14)
+st.pyplot(fig)
+st.write('Pada visualisasi di atas adalah untuk melihat perbandingan jumlah mobil bekas yang dijual "Individu / 1" dan "Dealer / 0". Berdasarkan plot bar yang terlihat "Dealer" menjual lebih banyak mobil bekas daripada "Individu". Jadi kita dapat mengambil sedikit kesimpulan bahwa distribusi mobil bekas ini lebih banyak dilakukan oleh "Dealer".')
 
-    st.write("### Dataset Description")
-    st.write(df.describe())
+st.title('Number of Cars by Manufacturing Year')
+fig, ax = plt.subplots(figsize=(12, 6))
+sns.countplot(x='Year', data=df, palette='pastel', order=df['Year'].value_counts().index)
+ax.set_xlabel('Manufacturing Year', fontsize=12)
+ax.set_ylabel('Count', fontsize=12)
+ax.set_title('Number of Cars by Manufacturing Year', fontsize=14)
+plt.xticks(rotation=45) 
+st.pyplot(fig)
+st.write('Pada visualisasi selanjutnya disini menggambarkan distribusi jumlah mobil bekas berdasarkan tahun pembuatannya. Disini kita bisa melihat tren ataupun adanya peningkatan maupun penurunan dalam jumlah mobil yang di produksi dari tahun ke tahun.')
 
-elif analysis_choice == "Correlation":
-    st.write("### Correlation Heatmap")
-    corr_matrix = df.corr()
-    plt.figure(figsize=(10, 8))
-    sns.heatmap(corr_matrix, annot=True, cmap="coolwarm", fmt=".2f")
-    st.pyplot()
-
-elif analysis_choice == "Distribution":
-    st.write("### Distribution of Features")
-    feature_choice = st.selectbox("Select Feature", df.columns)
-    plt.figure(figsize=(10, 6))
-    sns.histplot(df[feature_choice], kde=True)
-    plt.xlabel(feature_choice)
-    plt.ylabel("Frequency")
-    plt.title(f"Distribution of {feature_choice}")
-    st.pyplot()
+st.title('Comparison of Selling Price by Transmission Type')
+fig, ax = plt.subplots(figsize=(8, 6))
+sns.boxplot(x='Transmission', y='Selling_Price', data=df, palette='pastel')
+ax.set_xlabel('Transmission Type', fontsize=12)
+ax.set_ylabel('Selling Price', fontsize=12)
+ax.set_title('Comparison of Selling Price by Transmission Type', fontsize=14)
+st.pyplot(fig)
+st.write('Selanjutnya pada visualisasi Boxplot di atas merupakan perbandingan distribusi harga jual mobil bekas berdasarkan tipe atau jenis transmisinya, yaitu : transmisi manual dan otomatis. Dari visualisasi tersebut dapat sedikit diambil kesimpulan bahwa mobil bekas dengan transmisi otomatis cenderung memiliki harga jual yang lebih tinggi daripada mobil bekas dengan transmisi manual.')
 
 file_path = 'dtc_model.pkl'
 
